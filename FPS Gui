@@ -1,0 +1,53 @@
+-- Instances:
+
+local FPS = Instance.new("ScreenGui")
+local Counter = Instance.new("TextLabel")
+
+--Properties:
+
+FPS.Name = "FPS"
+FPS.Parent = game.CoreGui
+FPS.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Counter.Name = "Counter"
+Counter.Parent = FPS
+Counter.AnchorPoint = Vector2.new(1, 0)
+Counter.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Counter.BackgroundTransparency = 1.000
+Counter.Position = UDim2.new(0.98, 0, -0.025, 0)
+Counter.Size = UDim2.new(0.0624024943, 0, 0.0238379017, 0)
+Counter.Font = Enum.Font.SourceSans
+Counter.Text = ""
+Counter.TextColor3 = Color3.fromRGB(0, 0, 0)
+Counter.TextScaled = true
+Counter.TextSize = 14.000
+Counter.TextWrapped = true
+
+-- Scripts:
+
+local function JZLHFCN_fake_script() -- Counter.LocalScript 
+	local script = Instance.new('LocalScript', Counter)
+
+	local FpsLabel = script.Parent
+	local Heartbeat = game:GetService("RunService").Heartbeat
+	
+	local LastIteration, Start
+	local FrameUpdateTable = { }
+	
+	local function HeartbeatUpdate()
+		LastIteration = tick()
+		for Index = #FrameUpdateTable, 1, -1 do
+			FrameUpdateTable[Index + 1] = (FrameUpdateTable[Index] >= LastIteration - 1) and FrameUpdateTable[Index] or nil
+		end
+	
+		FrameUpdateTable[1] = LastIteration
+		local CurrentFPS = (tick() - Start >= 1 and #FrameUpdateTable) or (#FrameUpdateTable / (tick() - Start))
+		CurrentFPS = math.floor(CurrentFPS)
+		FpsLabel.Text = "FPS:" .. CurrentFPS
+	end
+	
+	Start = tick()
+	wait(1)
+	Heartbeat:Connect(HeartbeatUpdate)
+end
+coroutine.wrap(JZLHFCN_fake_script)()
